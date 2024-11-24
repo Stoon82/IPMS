@@ -23,6 +23,7 @@ class UserUpdate(BaseModel):
 
 class User(UserBase):
     id: int
+    google_id: Optional[str] = None
     
     class Config:
         from_attributes = True
@@ -33,3 +34,6 @@ class PasswordResetRequest(BaseModel):
 class PasswordResetVerify(BaseModel):
     token: str
     new_password: str
+
+class GoogleAuthRequest(BaseModel):
+    token: str

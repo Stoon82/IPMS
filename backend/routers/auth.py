@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 import secrets
@@ -12,7 +12,8 @@ from schemas.auth import (
     User as UserSchema,
     Token,
     PasswordResetRequest,
-    PasswordResetVerify
+    PasswordResetVerify,
+    GoogleAuthRequest
 )
 from auth.utils import (
     get_password_hash,
@@ -20,6 +21,7 @@ from auth.utils import (
     create_access_token,
     get_current_user,
 )
+from auth.google import authenticate_google_user
 from config import get_settings
 
 settings = get_settings()
@@ -136,3 +138,33 @@ def verify_password_reset(
     
     db.commit()
     return {"message": "Password reset successful"}
+
+@router.post("/google", response_model=Token)
+async def google_auth(
+    auth_request: GoogleAuthRequest,
+    response: Response,
+    db: Session = Depends(get_db)
+):
+    """Authenticate with Google OAuth."""
+    try:
+        user, access_token = await authenticate_google_user(db, auth_request.token)
+        
+        # Set cookie for client-side storage
+        response.set_cookie(
+            key="access_token",
+            value=f"Bearer {access_token}",
+            httponly=True,
+            secure=True,
+            samesite="lax",
+            max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e)
+        )
