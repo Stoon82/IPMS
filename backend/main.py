@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routers import tasks_router, activities_router, development_router, profile_router, projects_router
 from routers.auth import router as auth_router
+from routers.ideas import router as ideas_router
+from routers.concepts import router as concepts_router
+from routers.project_ideas import router as project_ideas_router
 import uvicorn
 import logging
 import sys
@@ -89,11 +92,10 @@ app.include_router(tasks_router, prefix="/api/tasks")
 app.include_router(activities_router, prefix="/api/activities")
 app.include_router(development_router, prefix="/api/development")
 app.include_router(profile_router, prefix="/api/profile")
-app.include_router(
-    projects_router,
-    prefix="/api/projects",
-    tags=["projects"]
-)
+app.include_router(projects_router, prefix="/api/projects", tags=["projects"])
+app.include_router(ideas_router, prefix="/api/ideas", tags=["ideas"])
+app.include_router(concepts_router, prefix="/api/concepts", tags=["concepts"])
+app.include_router(project_ideas_router, prefix="/api/project-ideas", tags=["project-ideas"])
 
 @app.get("/")
 async def root():

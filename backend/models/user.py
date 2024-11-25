@@ -31,6 +31,8 @@ class User(Base):
     goals = relationship("Goal", back_populates="user", cascade="all, delete-orphan")
     habits = relationship("Habit", back_populates="user", cascade="all, delete-orphan")
     projects = relationship("Project", back_populates="owner")
+    ideas = relationship("Idea", back_populates="user", cascade="all, delete-orphan")
+    concept_notes = relationship("ConceptNote", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.username}>"
