@@ -1,12 +1,18 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from datetime import datetime
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+    refresh_token: Optional[str] = None
+    expires_at: datetime
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class RefreshToken(BaseModel):
+    refresh_token: str
 
 class UserBase(BaseModel):
     username: str
@@ -23,7 +29,6 @@ class UserUpdate(BaseModel):
 
 class User(UserBase):
     id: int
-    google_id: Optional[str] = None
     
     class Config:
         from_attributes = True
@@ -35,5 +40,6 @@ class PasswordResetVerify(BaseModel):
     token: str
     new_password: str
 
-class GoogleAuthRequest(BaseModel):
-    token: str
+class LoginRequest(BaseModel):
+    username: str
+    password: str

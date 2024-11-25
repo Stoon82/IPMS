@@ -11,7 +11,6 @@ from schemas.task import TaskCreate, TaskUpdate, TaskResponse
 from auth.utils import get_current_user
 
 router = APIRouter(
-    prefix="/tasks",
     tags=["tasks"]
 )
 
