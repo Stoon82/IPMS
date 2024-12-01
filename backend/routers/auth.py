@@ -77,7 +77,18 @@ def register(user: UserCreate, response: Response, db: Session = Depends(get_db)
                 username=user.username,
                 email=user.email,
                 full_name=user.full_name,
-                hashed_password=hashed_password
+                hashed_password=hashed_password,
+                created_at=datetime.utcnow(),
+                tasks=[],
+                password_resets=[],
+                refresh_tokens=[],
+                activities=[],
+                journal_entries=[],
+                goals=[],
+                habits=[],
+                projects=[],
+                ideas=[],
+                concept_notes=[]
             )
             
             logger.debug("Adding user to database...")
@@ -118,6 +129,7 @@ def register(user: UserCreate, response: Response, db: Session = Depends(get_db)
             )
             
     except HTTPException as he:
+        logger.error(f"HTTP error during registration: {he.detail}", exc_info=True)
         raise he
     except Exception as e:
         logger.error(f"Unexpected error during registration: {str(e)}", exc_info=True)

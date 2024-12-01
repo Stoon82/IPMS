@@ -1,18 +1,14 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, registry
-from config import settings
+from sqlalchemy.orm import sessionmaker
 import logging
 import os
+from config import settings
 
 logger = logging.getLogger(__name__)
 
-# Create a registry for managing models
-mapper_registry = registry()
-Base = mapper_registry.generate_base()
-
-# Create a single metadata instance
-metadata = Base.metadata
+# Create a single Base class for all models
+Base = declarative_base()
 
 # Ensure the database directory exists
 db_path = os.path.dirname(settings.DATABASE_URL.replace('sqlite:///', ''))
@@ -50,9 +46,8 @@ def get_db():
 def init_db():
     """Initialize the database by creating all tables."""
     try:
-        import models  # Import all models to ensure they are registered with SQLAlchemy
         Base.metadata.create_all(bind=engine)
         logger.info("Database tables created successfully")
     except Exception as e:
-        logger.error(f"Failed to create database tables: {str(e)}")
+        logger.error(f"Failed to create database tables: {e}")
         raise

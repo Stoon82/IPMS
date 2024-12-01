@@ -33,3 +33,4 @@ class Project(Base):
     tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
     concept_notes = relationship("ConceptNote", back_populates="project", cascade="all, delete-orphan")
     ideas = relationship("Idea", secondary=project_ideas, back_populates="projects")
+    mindmaps = relationship("Mindmap", back_populates="project")
