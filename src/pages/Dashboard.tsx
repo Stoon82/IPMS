@@ -12,6 +12,8 @@ import { useTaskStats } from '../hooks/useTaskStats';
 import { StatCard } from '../components/dashboard/StatCard';
 import { TaskDistributionChart } from '../components/dashboard/TaskDistributionChart';
 import { UserProfileCard } from '../components/dashboard/UserProfileCard';
+import { ActionButtons } from '../components/dashboard/ActionButtons';
+import { RecentProjects } from '../components/dashboard/RecentProjects';
 
 export const Dashboard: React.FC = () => {
     const { tasks, isLoading, error } = useTasks();
@@ -51,8 +53,8 @@ export const Dashboard: React.FC = () => {
                 Dashboard
             </Typography>
 
-            <Grid container spacing={3} mb={4}>
-                <Grid item xs={12} md={9}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6} md={3}>
                             <StatCard
@@ -60,7 +62,6 @@ export const Dashboard: React.FC = () => {
                                 value={stats.totalTasks}
                                 icon={<TaskIcon />}
                                 color="#1976d2"
-                                subtitle="All tasks"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
@@ -69,7 +70,6 @@ export const Dashboard: React.FC = () => {
                                 value={stats.completedTasks}
                                 icon={<CompletedIcon />}
                                 color="#4caf50"
-                                subtitle={`${Math.round(stats.completionRate)}% completion rate`}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
@@ -78,7 +78,6 @@ export const Dashboard: React.FC = () => {
                                 value={stats.overdueTasks}
                                 icon={<OverdueIcon />}
                                 color="#f44336"
-                                subtitle="Past due date"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
@@ -87,49 +86,34 @@ export const Dashboard: React.FC = () => {
                                 value={stats.upcomingTasks}
                                 icon={<UpcomingIcon />}
                                 color="#ff9800"
-                                subtitle="Due this week"
                             />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TaskDistributionChart
+                                title="Tasks by Status"
+                                data={statusData}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TaskDistributionChart
+                                title="Tasks by Priority"
+                                data={priorityData}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <RecentProjects />
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={3}>
-                    <UserProfileCard />
-                </Grid>
-            </Grid>
-
-            <Grid container spacing={3} mb={4}>
-                <Grid item xs={12} md={6}>
-                    <TaskDistributionChart
-                        title="Tasks by Status"
-                        data={statusData}
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TaskDistributionChart
-                        title="Tasks by Priority"
-                        data={priorityData}
-                    />
-                </Grid>
-            </Grid>
-
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Today's Activity"
-                        value={stats.recentActivity.today}
-                        icon={<TrendingIcon />}
-                        color="#9c27b0"
-                        subtitle="Tasks updated today"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Weekly Activity"
-                        value={stats.recentActivity.week}
-                        icon={<TrendingIcon />}
-                        color="#2196f3"
-                        subtitle="Tasks updated this week"
-                    />
+                <Grid item xs={12} md={4}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <UserProfileCard />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ActionButtons />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Box>
