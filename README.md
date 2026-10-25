@@ -1,3 +1,8 @@
+> **ARCHIVED — superseded by [project-hub](https://github.com/Stoon82/project-hub).**
+> Kept for history; active development is in the successor. Landscape map: [project-hub](https://github.com/Stoon82/project-hub).
+
+---
+
 # Intelligent Personal Management System (IPMS)
 
 A comprehensive personal information and life management system that combines various management tools with AI assistance to help organize and optimize your personal life.
